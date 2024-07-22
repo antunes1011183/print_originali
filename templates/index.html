@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Bem-vindo ao Printer Originali{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Bem-vindo ao Printer Originali</h1>
+    <p class="lead">Este é o sistema de gestão de impressão de etiquetas da Originali.</p>
+    <hr class="my-4">
+    <p>Use a barra de navegação acima para acessar as funcionalidades do sistema, como upload de arquivos e visualização de itens.</p>
+    <a class="btn btn-primary btn-lg" href="/visualizar" role="button">Visualizar Itens</a>
+    <a class="btn btn-secondary btn-lg" href="/upload" role="button">Upload de Arquivos</a>
+</div>
+{% endblock %}

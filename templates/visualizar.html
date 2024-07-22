@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizar Itens</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            text-align: left;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        .container-fluid {
+            max-width: 100%;
+            margin: 0;
+        }
+
+        table {
+            margin-top: 20px;
+        }
+
+        .table tbody tr.inspecionado {
+            background-color: #c3e6cb;
+        }
+
+        .table th,
+        .table td {
+            text-align: center;
+        }
+
+        .table th {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .table tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+        nav {
+            background-color: #007bff;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        .inspecionado {
+            color: darkgreen;
+        }
+
+        .form-control,
+        .form-select {
+            width: 100px;
+            margin: auto;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/upload">Upload</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/visualizar">Visualizar</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="modal-title">Tabela de Informações</h5>
+            </div>
+        </div>
+        <form id="filtro-form">
+            <table class="table table-bordered table-hover dataTable" id="tabela" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Cód. Barra<br><input type="text" class="form-control" name="cod_barra" value="{{ filters['cod_barra'] }}"></th>
+                        <th>Cód. Box<br><input type="text" class="form-control" name="cod_box" value="{{ filters['cod_box'] }}"></th>
+                        <th>Desc. Item 1<br><input type="text" class="form-control" name="desc_item_1" value="{{ filters['desc_item_1'] }}"></th>
+                        <th>Desc. Item 2<br><input type="text" class="form-control" name="desc_item_2" value="{{ filters['desc_item_2'] }}"></th>
+                        <th>Embarque<br><input type="text" class="form-control" name="dt_embarque" value="{{ filters['dt_embarque'] }}"></th>
+                        <th>Cód Item<br><input type="text" class="form-control" name="it_codigo" value="{{ filters['it_codigo'] }}"></th>
+                        <th>Medida<br><input type="text" class="form-control" name="medida" value="{{ filters['medida'] }}"></th>
+                        <th>Emitente<br><input type="text" class="form-control" name="nome_emit" value="{{ filters['nome_emit'] }}"></th>
+                        <th>Transportadora<br><input type="text" class="form-control" name="nome_transp" value="{{ filters['nome_transp'] }}"></th>
+                        <th>Nº Linha<br><input type="text" class="form-control" name="nr_linha" value="{{ filters['nr_linha'] }}"></th>
+                        <th>Nº Pedido<br><input type="text" class="form-control" name="nr_pedido" value="{{ filters['nr_pedido'] }}"></th>
+                        <th>Seq.<br><input type="text" class="form-control" name="nr_sequencia" value="{{ filters['nr_sequencia'] }}"></th>
+                        <th>Nº Vol.<br><input type="text" class="form-control" name="nr_volume" value="{{ filters['nr_volume'] }}"></th>
+                        <th>Volume<br><input type="text" class="form-control" name="volume" value="{{ filters['volume'] }}"></th>
+                        <th>Impresso?<br><select class="form-select" name="item_impresso">
+                                <option value="" {% if filters['item_impresso'] == '' %}selected{% endif %}>Todos</option>
+                                <option value="sim" {% if filters['item_impresso'] == 'sim' %}selected{% endif %}>Sim</option>
+                                <option value="não" {% if filters['item_impresso'] == 'não' %}selected{% endif %}>Não</option>
+                            </select></th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in itens %}
+                    <tr {% if item.item_impresso == 'sim' %}class="inspecionado"{% endif %}>
+                        <td>{{ item.cod_barra }}</td>
+                        <td>{{ item.cod_box }}</td>
+                        <td>{{ item.desc_item_1 }}</td>
+                        <td>{{ item.desc_item_2 }}</td>
+                        <td>{{ item.dt_embarque }}</td>
+                        <td>{{ item.it_codigo }}</td>
+                        <td>{{ item.medida }}</td>
+                        <td>{{ item.nome_emit }}</td>
+                        <td>{{ item.nome_transp }}</td>
+                        <td>{{ item.nr_linha }}</td>
+                        <td>{{ item.nr_pedido }}</td>
+                        <td>{{ item.nr_sequencia }}</td>
+                        <td>{{ item.nr_volume }}</td>
+                        <td>{{ item.volume }}</td>
+                        <td>{{ item.item_impresso }}</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm imprimir-item" data-cod-barra="{{ item.cod_barra }}">
+                                <span class="material-symbols-outlined">print</span>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+        <div class="pagination-container">
+            {{ pagination.links }}
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var table = $('#tabela').DataTable({
+                paging: false,
+                searching: false,
+                ordering: true,
+                columnDefs: [
+                    { targets: [14], orderable: false }
+                ],
+                language: {
+                    search: "Filtrar:",
+                    paginate: {
+                        first: "Primeiro",
+                        previous: "Anterior",
+                        next: "Próximo",
+                        last: "Último"
+                    },
+                    info: "Mostrando _START_ a _END_ de _TOTAL_ Itens (filtradas de um total de _MAX_ entradas)"
+                }
+            });
+
+            // Evento para aplicar os filtros
+            $('#filtro-form input, #filtro-form select').on('input change', function () {
+                $('#filtro-form').submit();
+            });
+
+            // Evento para imprimir item
+            $('.imprimir-item').on('click', function (e) {
+                e.preventDefault();
+                var codBarra = $(this).data('cod-barra');
+                var url = `/consulta?quantity=1&cod_barra=${codBarra}`;
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    success: function (response) {
+                        alert('Item impresso com sucesso!');
+                        location.reload();  // Recarrega a página após o sucesso
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Erro ao imprimir item: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
